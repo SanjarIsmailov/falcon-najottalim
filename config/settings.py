@@ -134,3 +134,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = '/falcon/products/'  # Redirect to the product list after login
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'falcon_db',  # Replace with your PostgreSQL DB name
+        'USER': 'postgres',  # Replace with your PostgreSQL username
+        'PASSWORD': 'sriv2008',  # Replace with your PostgreSQL password
+        'HOST': 'localhost',  # Change if your DB is hosted elsewhere
+        'PORT': '5432',  # Default PostgreSQL port
+    }
+}
