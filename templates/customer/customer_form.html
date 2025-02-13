@@ -1,0 +1,29 @@
+<form hx-post="{{ request.path }}" hx-target="body" hx-swap="outerHTML">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label class="form-label">First Name</label>
+        {{ form.first_name }}
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Last Name</label>
+        {{ form.last_name }}
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Email</label>
+        {{ form.email }}
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Phone</label>
+        {{ form.phone }}
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Billing Address</label>
+        {{ form.billing_address }}
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Joined Date</label>
+        {{ form.joined_date }}
+    </div>
+
+    <button type="submit" class="btn btn-success">Save</button>
+</form>

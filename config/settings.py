@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'falcon',
     'accounts',
+    'customer'
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomUser'

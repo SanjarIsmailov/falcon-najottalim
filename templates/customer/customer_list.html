@@ -1,0 +1,89 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://unpkg.com/htmx.org"></script>
+</head>
+<body class="bg-light">
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Customer Management</h2>
+
+        <!-- Add Customer Button -->
+        <button class="btn btn-primary mb-3"
+                hx-get="{% url 'customer_create' %}"
+                hx-target="#modal-content"
+                data-bs-toggle="modal"
+                data-bs-target="#customerModal">
+            + Add Customer
+        </button>
+
+        <!-- Customer Table -->
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Joined Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for customer in customers %}
+                        <tr id="customer-{{ customer.id }}">
+                            <td>{{ customer.first_name }} {{ customer.last_name }}</td>
+                            <td>{{ customer.email }}</td>
+                            <td>{{ customer.phone }}</td>
+                            <td>{{ customer.joined_date|date:"Y-m-d" }}</td>  <!-- Formatted Joined Date -->
+                            <td>
+                                <!-- Edit Button -->
+                                <button class="btn btn-sm btn-warning"
+                                        hx-get="{% url 'customer_update' customer.id %}"
+                                        hx-target="#modal-content"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#customerModal">
+                                    Edit
+                                </button>
+
+                                <!-- Delete Button -->
+                                <button class="btn btn-sm btn-danger"
+                                        hx-delete="{% url 'customer_delete' customer.id %}"
+                                        hx-target="#customer-{{ customer.id }}"
+                                        hx-swap="outerHTML"
+                                        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Forms -->
+    <div class="modal fade" id="customerModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Customer Form</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="modal-content">
+                    <!-- Form will be dynamically loaded here via HTMX -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
