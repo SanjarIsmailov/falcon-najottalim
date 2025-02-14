@@ -146,3 +146,13 @@ DATABASES = {
         'PORT': '5432',  # Default PostgreSQL port
     }
 }
+
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Assign values from .env to Django settings
+SECRET_KEY = os.getenv("SECRET_KEY", "default-secret-key")
+DEBUG = os.getenv("DEBUG", "False") == "True"
+DATABASE_URL = os.getenv("DATABASE_URL")
