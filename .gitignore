@@ -1,0 +1,32 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+
+# Django-specific
+db.sqlite3
+*.sqlite3
+*.log
+media/
+staticfiles/
+
+# Secret settings (if you store them separately)
+.env
+config/settings/local.py
+config/settings/dev.py
+
+# VS Code settings (if using VS Code)
+.vscode/
+
+# JetBrains IDE settings (if using PyCharm)
+.idea/
+
+# macOS system files
+.DS_Store
+
+# Node.js dependencies (if using frontend frameworks)
+node_modules/
