@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,8 +40,19 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'falcon',
     'accounts',
-    'customer'
+    'customer',
 ]
+
+JAZZMIN_SETTINGS = {
+    "site_title": "My Admin Panel",
+    "site_header": "My Store Admin",
+    "welcome_sign": "Welcome to My Store",
+    "search_model": "your_app_name.Product",
+    "topmenu_links": [
+        {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"model": "your_app_name.Product"},
+    ],
+}
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
