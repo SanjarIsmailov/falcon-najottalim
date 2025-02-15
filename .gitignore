@@ -8,11 +8,15 @@ venv/
 env/
 
 # Django-specific
-db.sqlite3
-*.sqlite3
 *.log
 media/
 staticfiles/
+
+# Database files (SQLite removed, PostgreSQL specific files added)
+*.sqlite3
+db.sqlite3
+pgdata/
+*.dump
 
 # Secret settings (if you store them separately)
 .env
