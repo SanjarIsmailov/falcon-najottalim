@@ -4,7 +4,7 @@ from .models import Product
 
 def product_list(request):
     product_queryset = Product.objects.all()
-    paginator = Paginator(product_queryset, 6)  # Show 6 products per page
+    paginator = Paginator(product_queryset, 6)
 
     page_number = request.GET.get('page')
     products = paginator.get_page(page_number)

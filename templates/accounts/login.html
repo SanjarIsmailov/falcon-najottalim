@@ -51,6 +51,23 @@
     button:hover {
       background: #0056b3;
     }
+
+    .google-btn {
+      background-color: #db4437;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+      display: block;
+      text-decoration: none;
+    }
+
+    .google-btn:hover {
+      background-color: #c1351d;
+    }
   </style>
 
   <div class="login-container">
@@ -61,8 +78,13 @@
       {{ form.as_p }}
       <button type="submit">Login</button>
     </form>
+
+    <a href="{% url 'social:begin' 'google-oauth2' %}" class="google-btn">
+      Login with Google
+    </a>
+
     <p class="text-center mt-3">
-            You do not have account? <a href="{% url 'register' %}" class="text-primary">Register here</a>.
+      You do not have an account? <a href="{% url 'register' %}" class="text-primary">Register here</a>.
     </p>
   </div>
 {% endblock %}

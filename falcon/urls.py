@@ -1,9 +1,8 @@
+from django.conf.urls.static import static
 from django.urls import path
 
 from config import settings
-from . import views
 from .views import product_list, product_detail
-from django.conf.urls.static import static
 
 app_name = 'falcon'
 

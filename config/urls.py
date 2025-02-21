@@ -26,4 +26,5 @@ urlpatterns = [
     path('falcon/', include('falcon.urls'), name='falcon'),
     path('accounts/', include('accounts.urls')),
     path('customer/', include('customer.urls')),
+    path('oauth/', include('social_django.urls', namespace='social')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

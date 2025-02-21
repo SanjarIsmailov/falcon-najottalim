@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'falcon',
     'accounts',
     'customer',
+    'social_django'
 ]
 
 JAZZMIN_SETTINGS = {
@@ -55,9 +56,6 @@ JAZZMIN_SETTINGS = {
 }
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
-
-LOGIN_REDIRECT_URL = "/"  # Change this to the page you want users to see after login
-LOGOUT_REDIRECT_URL = "/accounts/login/"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -88,18 +86,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -146,8 +132,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = '/falcon/products/'  # Redirect to the product list after login
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -168,3 +152,14 @@ load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY", "default-secret-key")
 DEBUG = os.getenv("DEBUG", "False") == "True"
 DATABASE_URL = os.getenv("DATABASE_URL")
+
+AUTHENTICATION_BACKENDS = [
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',  # Keep default authentication
+]
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '873011271097-dr0cmsmltqdshnphc7thvvc76n0orqie.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
+
+LOGIN_REDIRECT_URL = '/falcon/products/'
+LOGOUT_REDIRECT_URL = '/falcon/products/'
