@@ -10,22 +10,24 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
 from pathlib import Path
+from dotenv import load_dotenv
+import dj_database_url
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = []
-
+# Set allowed hosts (configure properly in production)
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 
 # Application definition
-
 INSTALLED_APPS = [
     'jazzmin',
     'django.contrib.admin',
@@ -37,22 +39,25 @@ INSTALLED_APPS = [
     'falcon',
     'accounts',
     'customer',
-    'social_django'
+    'social_django',
 ]
 
+# Jazzmin settings
 JAZZMIN_SETTINGS = {
     "site_title": "My Admin Panel",
     "site_header": "My Store Admin",
     "welcome_sign": "Welcome to My Store",
-    "search_model": "your_app_name.Product",
+    "search_model": "falcon.Product",  # Replace with actual app name
     "topmenu_links": [
         {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
-        {"model": "your_app_name.Product"},
+        {"model": "falcon.Product"},  # Replace with actual app name
     ],
 }
 
+# Custom user model
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
+# Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -76,6 +81,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -83,9 +90,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
+# Database Configuration
+DATABASES = {
+    'default': dj_database_url.config(
+        default=os.getenv("DATABASE_URL", "postgres://postgres:password@localhost:5432/falcon_db"),
+        conn_max_age=600,
+    )
+}
 
+# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -101,60 +114,35 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-STATIC_URL = 'static/'
-
-import os
+# Static and Media files
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'falcon_db',  # Replace with your PostgreSQL DB name
-        'USER': 'postgres',  # Replace with your PostgreSQL username
-        'PASSWORD': 'sriv2008',  # Replace with your PostgreSQL password
-        'HOST': 'localhost',  # Change if your DB is hosted elsewhere
-        'PORT': '5432',  # Default PostgreSQL port
-    }
-}
+# Secret Key
+SECRET_KEY = os.getenv("SECRET_KEY")
 
-from dotenv import load_dotenv
-
-# Load environment variables from .env file
-load_dotenv()
-
-# Assign values from .env to Django settings
-SECRET_KEY = os.getenv("SECRET_KEY", "default-secret-key")
-DATABASE_URL = os.getenv("DATABASE_URL")
-
+# Authentication Backends
 AUTHENTICATION_BACKENDS = [
     'social_core.backends.google.GoogleOAuth2',
-    'django.contrib.auth.backends.ModelBackend',  # Keep default authentication
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
+# Social Authentication (Google)
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv("SOCIAL_AUTH_GOOGLE_OAUTH2_KEY")
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv("SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET")
 
+# Login/Logout Redirects
 LOGIN_REDIRECT_URL = '/falcon/products/'
 LOGOUT_REDIRECT_URL = '/falcon/products/'
