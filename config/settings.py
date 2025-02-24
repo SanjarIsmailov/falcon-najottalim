@@ -154,8 +154,8 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  # Keep default authentication
 ]
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '873011271097-dr0cmsmltqdshnphc7thvvc76n0orqie.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv("GOOGLE_OAUTH_CLIENT_ID")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv("GOOGLE_OAUTH_CLIENT_SECRET")
 
 LOGIN_REDIRECT_URL = '/falcon/products/'
 LOGOUT_REDIRECT_URL = '/falcon/products/'
