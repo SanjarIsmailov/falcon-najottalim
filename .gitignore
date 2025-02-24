@@ -1,0 +1,14 @@
+.venv/
+venv/
+
+/media/
+staticfiles/
+
+.env.idea/
+.vscode/
+*.iml
+
+*.log
+*.pot
+*.mo
+.DS_Store
