@@ -146,7 +146,6 @@ load_dotenv()
 
 # Assign values from .env to Django settings
 SECRET_KEY = os.getenv("SECRET_KEY", "default-secret-key")
-DEBUG = os.getenv("DEBUG", "False") == "True"
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 AUTHENTICATION_BACKENDS = [
