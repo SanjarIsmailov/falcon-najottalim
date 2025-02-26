@@ -13,7 +13,7 @@ def log_product_creation(sender, instance, created, **kwargs):
 
 @receiver(pre_save, sender=Product)
 def track_price_changes(sender, instance, **kwargs):
-    if instance.pk:  # Check if the product already exists
+    if instance.pk:
         old_product = Product.objects.get(pk=instance.pk)
         if old_product.price != instance.price:
             logger.info(f"Price changed for {instance.name}: ${old_product.price} -> ${instance.price}")
