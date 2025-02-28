@@ -7,43 +7,47 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
+
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="{% url 'falcon:product_list' %}">Falcon</a>
-            <div class="d-flex align-items-center">
-                {% if user.is_authenticated %}
-                    <span class="text-white me-3">Welcome, {{ user.username }}!</span>
-                    <form method="post" action="{% url 'logout' %}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger">Logout</button>
-                    </form>
-                {% else %}
-                    <a href="{% url 'login' %}" class="btn btn-primary me-2">Login</a>
-                    <a href="{% url 'register' %}" class="btn btn-success">Register</a>
-                {% endif %}
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <div class="d-flex align-items-center">
+                    {% if user.is_authenticated %}
+                        <span class="text-white me-3">Welcome, {{ user.username }}!</span>
+                        <form method="post" action="{% url 'logout' %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Logout</button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-primary me-2">Login</a>
+                        <a href="{% url 'register' %}" class="btn btn-success">Register</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </nav>
 
-
     <!-- Product List -->
     <div class="container mt-4">
-        <h2 class="text-center mb-4">All Products</h2>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="text-center">All Products</h2>
+            <a href="{% url 'falcon:export_products' %}" class="btn btn-outline-primary">📥 Download CSV</a>
+        </div>
         <div class="row">
             {% for product in products %}
             <div class="col-md-4 mb-4">
                 <div class="card shadow-sm border-0">
-                    {% if product.image %}
-                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 250px; object-fit: cover;">
-                    {% else %}
-                        <img src="https://via.placeholder.com/250" class="card-img-top" alt="No Image Available" style="height: 250px; object-fit: cover;">
-                    {% endif %}
+                    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 250px; object-fit: cover;">
                     <div class="card-body text-center">
                         <h5 class="card-title">{{ product.name }}</h5>
                         <p class="text-muted">
                             {% if product.original_price %}
-                                <del>${{ product.original_price }}</del>
+                                <del class="text-danger">${{ product.original_price }}</del>
                             {% endif %}
                             <strong class="text-success">${{ product.price }}</strong>
                         </p>
@@ -51,10 +55,15 @@
                     </div>
                 </div>
             </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p class="text-muted">No products available.</p>
+            </div>
             {% endfor %}
         </div>
 
         <!-- Pagination Controls -->
+        {% if products.has_other_pages %}
         <nav>
             <ul class="pagination justify-content-center mt-4">
                 {% if products.has_previous %}
@@ -80,6 +89,10 @@
                 {% endif %}
             </ul>
         </nav>
+        {% endif %}
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
