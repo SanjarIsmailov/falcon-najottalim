@@ -46,7 +46,6 @@ class ProductAdmin(admin.ModelAdmin):
 
     admin_image.short_description = "Image"
 
-    # ✅ Export to CSV function
     def export_as_csv(self, request, queryset):
         response = HttpResponse(content_type="text/csv")
         response["Content-Disposition"] = 'attachment; filename="products.csv"'

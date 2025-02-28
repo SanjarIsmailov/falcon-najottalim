@@ -18,7 +18,6 @@ def product_detail(request, product_id):
     return render(request, 'falcon/product_detail.html', {'product': product})
 
 def export_products_csv(request):
-    """Exports product data as a CSV file"""
     response = HttpResponse(content_type="text/csv")
     response["Content-Disposition"] = 'attachment; filename="products.csv"'
 
