@@ -2,28 +2,24 @@ import csv
 from django.http import HttpResponse
 from django.contrib import admin
 from django.utils.html import format_html
-from django.db.models import Avg, Sum
+from django.db.models import Avg
 from .models import Product
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ("name", "formatted_price", "stock_status", "average_rating", "total_stock", "is_new", "admin_image")
-    list_filter = ("stock_status", "is_new", "rating")
-    search_fields = ("name", "description", "stock_status")
+    list_display = ("name", "formatted_price", "stock_status", "average_rating", "is_new", "admin_image")
+    list_filter = ("stock_status", "is_new")
+    search_fields = ("name", "description")
     ordering = ("-id",)
-    actions = ["export_as_csv"]  # ✅ Add export action
+    actions = ["export_as_csv"]
 
     def get_queryset(self, request):
-        queryset = super().get_queryset(request)
-        return queryset.annotate(
-            avg_rating=Avg("rating"),
-            total_stock=Sum("stock")
-        )
+        return super().get_queryset(request).annotate(avg_rating=Avg("rating"))
 
     def formatted_price(self, obj):
         return format_html(
-            '<span style="text-decoration: line-through; color: red;">${}</span> <strong class="text-success">${}</strong>',
+            '<span style="text-decoration: line-through; color: red;">${}</span> <strong style="color: green;">${}</strong>',
             obj.original_price or 0, obj.price or 0
         )
 
@@ -34,15 +30,8 @@ class ProductAdmin(admin.ModelAdmin):
 
     average_rating.short_description = "Avg Rating"
 
-    def total_stock(self, obj):
-        return obj.total_stock or 0
-
-    total_stock.short_description = "Total Stock"
-
     def admin_image(self, obj):
-        if obj.image:
-            return format_html('<img src="{}" width="50" height="50" style="border-radius: 5px;" />', obj.image.url)
-        return "No Image"
+        return format_html('<img src="{}" width="50" height="50" style="border-radius: 5px;" />', obj.image.url) if obj.image else "No Image"
 
     admin_image.short_description = "Image"
 
@@ -51,7 +40,7 @@ class ProductAdmin(admin.ModelAdmin):
         response["Content-Disposition"] = 'attachment; filename="products.csv"'
 
         writer = csv.writer(response)
-        writer.writerow(["ID", "Name", "Price", "Stock Status", "Average Rating", "Total Stock"])
+        writer.writerow(["ID", "Name", "Price", "Stock Status", "Average Rating"])
 
         for product in queryset:
             writer.writerow([
@@ -59,8 +48,7 @@ class ProductAdmin(admin.ModelAdmin):
                 product.name,
                 product.price,
                 product.stock_status,
-                round(product.avg_rating, 2) if hasattr(product, "avg_rating") else "N/A",
-                product.total_stock if hasattr(product, "total_stock") else 0
+                round(product.avg_rating, 2) if hasattr(product, "avg_rating") else "N/A"
             ])
 
         return response
